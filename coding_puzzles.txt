@@ -1,0 +1,339 @@
+1 + 2 + ... + 1000 = ?
+
+answer: 500500 (done)
+
+3^(3^(3^(3^3))) % 100 = ?
+
+answer: 87 (done)
+
+x is a 10x10x10x10 array
+x[i][j][k][l] = 1000 * i + 100 * j + 10 * k + l
+(minimum . map minimum . map (map minimum) . map (map (map minimum))) x = 0
+(maximum . map maximum . map (map maximum) . map (map (map maximum))) x = 9999
+(minimum . map maximum . map (map sum) . map (map (map product))) x = ?
+
+answer: 6202775059909876223715768192000 (done)
+
+f(x) = number of pairs of pairs of matching braces in x where one pair is in the other
+f({}) = 0
+f({{}}) = 1 (the outer pair and the inner pair)
+f({{}{}}) = 2 (the outer pair and either inner pair)
+f({{{}}}) = 3 (outer and middle, outer and inner, and middle and inner)
+f({{{}}{}}) = 4
+f({{}{}{{{}{}}}{{}}}) = ?
+
+answer: 14 (done)
+
+f(x) = sum of bitwise and, bitwise xor, and bitwise or of all numbers in x
+f([7, 13, 15]) = 4 + 1 + 15 = 20
+f([674, 44, 278, 599, 351, 551, 456, 524, 648, 865, 273, 383, 696, 756, 615, 384, 189, 221, 201, 463]) = ?
+
+answer: 1592 (done)
+
+first number that is 1 mod 5, 0 mod 11, 20 mod 29, 35 mod 43, 48 mod 59, and 130 mod 137 = ?
+
+answer: 275323961 (done)
+
+a hidden 7 in a number is a set of consecutive digits in the number that form a multiple of 7
+number of hidden 7s in 7 = 1
+number of hidden 7s in 357 = 3
+number of hidden 7s in 733 = 1
+number of hidden 7s in 63750640677315350160 = 41
+number of hidden 7s in 306994111772424400362482646284077776273548255558616473829043 = ?
+
+answer: 265 (done)
+
+The perimeter of a 1x2 rectangle = 6
+The surface area of a 1x2x3 solid = 22
+The hyper-surface area of a 1x2x3x4 hyper-solid = 100
+The hyper-surface area of a 1x2x3x4x5x6x7x8x9x10 hyper-solid = ?
+
+answer = 21257280 (done)
+
+number of numbers that can be made using all of 1, 2, 3, 4, +, -, - = 4 (2, 4, 6, 8)
+number of numbers that can be made using all of 4, 1, 2, 4, 3, 10, 7, +, -, +, +, -, - = ?
+
+answer: 16 (done)
+
+The INnately Simple EnCryption Ultimately Resisting Enemies (INSECURE) committee has come up with a hash function, defined as follows:
+
+f(x), where x is an (unsigned) 32-bit number, considers x as 2 16-bit numbers y (which can be considered as four 4-bit numbers a, b, c, d) and z (which can be considered as four 4-bit numbers e, f, g, h).
+
+It then swaps bits a and b (numbering bits in a big-endian way) of z, then bits c and d of z, then bits e and f of y, and then bits g and h of y.
+
+f(100000000) = 99967233
+
+h(x) (the actual hash function), where x is a 32-bit number, applies f to x 256 times. Here is how h(100000000) might be computed:
+
+Iteration 0: 100000000
+Iteration 1: 99967233
+Iteration 2: 99968256
+Iteration 3: 66445568
+Iteration 4: 66416896
+Iteration 5: 1123410176
+...
+Iteration 256: 46123024
+
+So h(100000000) is 46123024.
+
+The lowest possible value for a + b such that a and b are both (unsigned) 32-bit numbers, a != b, and h(a) == h(b) = ?
+
+answer: 141886
+
+1 <-> 2: 9
+1 <-> 4: 9
+1 <-> 7: 8
+1 <-> 9: 1
+1 <-> 11: 6
+1 <-> 12: 6
+1 <-> 13: 9
+1 <-> 14: 5
+1 <-> 22: 2
+1 <-> 25: 7
+1 <-> 28: 3
+2 <-> 4: 7
+2 <-> 6: 3
+2 <-> 11: 5
+2 <-> 12: 6
+2 <-> 13: 3
+2 <-> 14: 1
+2 <-> 16: 6
+2 <-> 17: 10
+2 <-> 23: 7
+2 <-> 27: 7
+2 <-> 28: 5
+3 <-> 4: 8
+3 <-> 6: 4
+3 <-> 9: 8
+3 <-> 13: 1
+3 <-> 15: 7
+3 <-> 20: 5
+3 <-> 21: 2
+3 <-> 23: 6
+3 <-> 28: 1
+4 <-> 9: 2
+4 <-> 10: 1
+4 <-> 14: 7
+4 <-> 19: 7
+4 <-> 25: 1
+4 <-> 27: 5
+4 <-> 28: 4
+4 <-> 29: 4
+5 <-> 6: 9
+5 <-> 11: 10
+5 <-> 13: 1
+5 <-> 14: 8
+5 <-> 16: 5
+5 <-> 23: 8
+6 <-> 12: 6
+6 <-> 15: 10
+6 <-> 17: 3
+6 <-> 21: 10
+6 <-> 23: 6
+6 <-> 26: 3
+6 <-> 30: 3
+7 <-> 11: 7
+7 <-> 13: 2
+7 <-> 16: 6
+7 <-> 22: 5
+7 <-> 28: 6
+8 <-> 15: 2
+8 <-> 25: 7
+9 <-> 13: 3
+9 <-> 17: 3
+9 <-> 18: 2
+9 <-> 19: 10
+9 <-> 20: 7
+9 <-> 21: 9
+9 <-> 23: 7
+9 <-> 25: 9
+9 <-> 26: 5
+9 <-> 28: 1
+9 <-> 29: 4
+10 <-> 12: 2
+10 <-> 14: 6
+10 <-> 15: 4
+10 <-> 26: 6
+10 <-> 30: 8
+11 <-> 12: 7
+11 <-> 21: 7
+11 <-> 29: 3
+12 <-> 15: 6
+12 <-> 17: 6
+12 <-> 18: 10
+12 <-> 24: 10
+13 <-> 15: 4
+13 <-> 19: 6
+13 <-> 28: 5
+14 <-> 17: 3
+14 <-> 18: 3
+14 <-> 23: 8
+14 <-> 25: 3
+14 <-> 27: 10
+14 <-> 30: 5
+15 <-> 25: 3
+15 <-> 26: 2
+15 <-> 27: 4
+15 <-> 30: 6
+16 <-> 17: 3
+16 <-> 18: 7
+16 <-> 21: 3
+16 <-> 22: 8
+16 <-> 29: 2
+17 <-> 18: 6
+17 <-> 24: 2
+17 <-> 28: 4
+17 <-> 29: 10
+18 <-> 21: 8
+18 <-> 22: 4
+18 <-> 23: 6
+18 <-> 26: 6
+19 <-> 20: 10
+19 <-> 22: 7
+19 <-> 23: 3
+19 <-> 27: 8
+19 <-> 30: 4
+20 <-> 21: 5
+20 <-> 22: 2
+20 <-> 23: 8
+20 <-> 25: 7
+20 <-> 26: 4
+20 <-> 30: 2
+21 <-> 22: 2
+21 <-> 24: 3
+21 <-> 26: 8
+22 <-> 25: 2
+22 <-> 29: 8
+22 <-> 30: 1
+23 <-> 24: 10
+23 <-> 25: 2
+23 <-> 30: 2
+24 <-> 30: 9
+25 <-> 26: 10
+25 <-> 29: 10
+26 <-> 27: 5
+26 <-> 29: 4
+26 <-> 30: 1
+27 <-> 28: 8
+27 <-> 30: 6
+28 <-> 30: 3
+
+length of shortest path from 1 to 2 in this graph = 6 (1 <-> 14 <-> 2)
+length of shortest path from 1 to 3 in this graph = 3 (1 <-> 9 <-> 28 <-> 3)
+length of shortest path from 1 to 10 in this graph = 4 (1 <-> 9 <-> 4 <-> 10)
+length of shortest path from 1 to 30 in this graph = ?
+
+answer: 3 (done)
+
+todo: plain-forest-mountain-ocean shortest path
+
+todo: largest perimeter among islands on map
+
+todo: how many spanning trees
+
+1 <-> 5
+3 <-> 8
+6 <-> 10
+The size of the largest connected component of this graph = 2 (three-way tie)
+
+1 <-> 4
+1 <-> 14
+1 <-> 18
+2 <-> 14
+3 <-> 7
+3 <-> 10
+3 <-> 17
+4 <-> 15
+5 <-> 7
+5 <-> 10
+6 <-> 7
+8 <-> 15
+9 <-> 14
+10 <-> 19
+10 <-> 20
+12 <-> 15
+12 <-> 20
+13 <-> 14
+14 <-> 18
+The size of the largest connected component of this graph = 18 (all but 11 and 16)
+
+1 <-> 19
+2 <-> 10
+2 <-> 26
+2 <-> 30
+4 <-> 29
+6 <-> 10
+7 <-> 24
+8 <-> 29
+10 <-> 12
+10 <-> 20
+10 <-> 29
+10 <-> 30
+11 <-> 19
+11 <-> 25
+12 <-> 23
+15 <-> 18
+15 <-> 19
+16 <-> 28
+18 <-> 24
+18 <-> 30
+28 <-> 29
+The size of the largest connected component of this graph = ?
+
+answer: 21 (done)
+
+zero a
+zero b
+zero c
+zero d
+zero e
+zero f
+inc a
+inc a
+inc a
+inc a
+inc b
+inc b
+inc b
+inc c
+.a
+.b
+dec b
+inc d
+jnz b .b
+.c
+dec d
+inc b
+.d
+dec c
+inc e
+inc e
+inc e
+inc f
+jnz c .d
+.e
+dec f
+inc c
+jnz f .e
+jnz d .c
+.f
+dec e
+inc c
+jnz e .f
+dec a
+jnz a .a
+.g
+.h
+dec c
+inc f
+jnz c .h
+.i
+dec f
+inc c
+inc a
+jnz f .i
+dec c
+jnz c .g
+out a
+
+output = ? (done)

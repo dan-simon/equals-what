@@ -1,0 +1,23 @@
+var _user$project$Repl$t_s_o_l = {ctor: '_Tuple0'};
+var _user$project$Repl$preRegex = _elm_lang$core$Regex$regex('<pre>\n[^<>]+\n</pre>');
+var _user$project$Repl$interspersePre = F4(
+	function (pre, useless, err, texts) {
+		return A3(
+			_elm_lang$core$List$map2,
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			{ctor: '::', _0: useless, _1: pre},
+			texts);
+	});
+var _user$project$Repl$findText = A2(_elm_lang$core$Regex$split, _elm_lang$core$Regex$All, _user$project$Repl$preRegex);
+var _user$project$Repl$findPre = function (_p0) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (_) {
+			return _.match;
+		},
+		A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, _user$project$Repl$preRegex, _p0));
+};
+var _user$project$Repl$d_e_l_t_r_o_n_3_0_3_0 = _user$project$Repl$interspersePre;

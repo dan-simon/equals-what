@@ -1,0 +1,17 @@
+var _user$project$LocalStorage$setStorage = _elm_lang$core$Native_Platform.outgoingPort(
+	'setStorage',
+	function (v) {
+		return {
+			seen: _elm_lang$core$Native_List.toArray(v.seen).map(
+				function (v) {
+					return _elm_lang$core$Native_List.toArray(v).map(
+						function (v) {
+							return v;
+						});
+				}),
+			page: _elm_lang$core$Native_List.toArray(v.page).map(
+				function (v) {
+					return v;
+				})
+		};
+	});

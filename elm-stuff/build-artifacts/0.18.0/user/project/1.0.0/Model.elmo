@@ -1,0 +1,40 @@
+var _user$project$Model$encode = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			page: function () {
+				var _p0 = model.page;
+				if (_p0.ctor === 'MainPage') {
+					return {ctor: '[]'};
+				} else {
+					return _p0._0;
+				}
+			}()
+		});
+};
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {seen: a, page: b};
+	});
+var _user$project$Model$JSModel = F2(
+	function (a, b) {
+		return {seen: a, page: b};
+	});
+var _user$project$Model$Question = function (a) {
+	return {ctor: 'Question', _0: a};
+};
+var _user$project$Model$MainPage = {ctor: 'MainPage'};
+var _user$project$Model$decode = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			page: function () {
+				var _p1 = model.page;
+				if (_p1.ctor === '[]') {
+					return _user$project$Model$MainPage;
+				} else {
+					return _user$project$Model$Question(_p1);
+				}
+			}()
+		});
+};
