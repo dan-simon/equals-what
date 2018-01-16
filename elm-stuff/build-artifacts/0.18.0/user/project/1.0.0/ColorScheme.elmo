@@ -1,0 +1,77 @@
+var _user$project$ColorScheme$surroundCss = function (s) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'body {',
+		A2(_elm_lang$core$Basics_ops['++'], s, '}'));
+};
+var _user$project$ColorScheme$toCssStyle = function (l) {
+	return _elm_lang$html$Html$text(
+		_user$project$ColorScheme$surroundCss(
+			A2(
+				_elm_lang$core$String$join,
+				'; ',
+				A2(
+					_elm_lang$core$List$map,
+					function (_p0) {
+						var _p1 = _p0;
+						return A2(
+							_elm_lang$core$Basics_ops['++'],
+							_p1._0,
+							A2(_elm_lang$core$Basics_ops['++'], ': ', _p1._1));
+					},
+					l))));
+};
+var _user$project$ColorScheme$getStyle = function (s) {
+	var _p2 = s;
+	if (_p2.ctor === 'GreenOnBlack') {
+		return {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'color', _1: 'green'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'black'},
+				_1: {ctor: '[]'}
+			}
+		};
+	} else {
+		return {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'color', _1: 'black'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'white'},
+				_1: {ctor: '[]'}
+			}
+		};
+	}
+};
+var _user$project$ColorScheme$toDisplayString = function (s) {
+	var _p3 = s;
+	if (_p3.ctor === 'GreenOnBlack') {
+		return 'green on black';
+	} else {
+		return 'black on white';
+	}
+};
+var _user$project$ColorScheme$toString = function (s) {
+	var _p4 = s;
+	if (_p4.ctor === 'GreenOnBlack') {
+		return 'green-on-black';
+	} else {
+		return 'black-on-white';
+	}
+};
+var _user$project$ColorScheme$BlackOnWhite = {ctor: 'BlackOnWhite'};
+var _user$project$ColorScheme$GreenOnBlack = {ctor: 'GreenOnBlack'};
+var _user$project$ColorScheme$colorSchemes = {
+	ctor: '::',
+	_0: _user$project$ColorScheme$GreenOnBlack,
+	_1: {
+		ctor: '::',
+		_0: _user$project$ColorScheme$BlackOnWhite,
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$ColorScheme$fromString = function (s) {
+	return _elm_lang$core$Native_Utils.eq(s, 'black-on-white') ? _user$project$ColorScheme$BlackOnWhite : _user$project$ColorScheme$GreenOnBlack;
+};

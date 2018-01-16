@@ -12,6 +12,7 @@ var _user$project$LocalStorage$setStorage = _elm_lang$core$Native_Platform.outgo
 			page: _elm_lang$core$Native_List.toArray(v.page).map(
 				function (v) {
 					return v;
-				})
+				}),
+			colorScheme: v.colorScheme
 		};
 	});

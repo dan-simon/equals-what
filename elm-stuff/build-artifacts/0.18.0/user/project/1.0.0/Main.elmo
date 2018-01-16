@@ -1,78 +1,6 @@
-var _user$project$Main$interspersePre = F4(
-	function (pre, useless, err, texts) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			{
-				ctor: '::',
-				_0: err,
-				_1: {ctor: '[]'}
-			},
-			_elm_lang$core$List$tail(
-				_elm_lang$core$List$concat(
-					A3(
-						_elm_lang$core$List$map2,
-						F2(
-							function (x, y) {
-								return {ctor: '::', _0: x, _1: y};
-							}),
-						{ctor: '::', _0: useless, _1: pre},
-						texts))));
-	});
-var _user$project$Main$toPre = function (x) {
-	return A2(
-		_elm_lang$html$Html$pre,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(x),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Main$innerPreRegex = _elm_lang$core$Regex$regex('<pre>\n([^<>]+)\n</pre>');
-var _user$project$Main$findPreContent = function (_p0) {
-	return A2(
-		_elm_lang$core$Maybe$withDefault,
-		'oops?',
-		A2(
-			_elm_lang$core$Maybe$andThen,
-			function (x) {
-				return x;
-			},
-			A2(
-				_elm_lang$core$Maybe$andThen,
-				function (_p1) {
-					return _elm_lang$core$List$head(
-						function (_) {
-							return _.submatches;
-						}(_p1));
-				},
-				_elm_lang$core$List$head(
-					A3(
-						_elm_lang$core$Regex$find,
-						_elm_lang$core$Regex$AtMost(1),
-						_user$project$Main$innerPreRegex,
-						_p0)))));
-};
-var _user$project$Main$preRegex = _elm_lang$core$Regex$regex('<pre>\n[^<>]+\n</pre>');
-var _user$project$Main$findPre = function (_p2) {
-	return A2(
-		_elm_lang$core$List$map,
-		function (_p3) {
-			return _user$project$Main$findPreContent(
-				function (_) {
-					return _.match;
-				}(_p3));
-		},
-		A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, _user$project$Main$preRegex, _p2));
-};
-var _user$project$Main$findText = function (_p4) {
-	return A3(
-		_elm_lang$core$Regex$split,
-		_elm_lang$core$Regex$All,
-		_user$project$Main$preRegex,
-		function (x) {
-			return A2(_elm_lang$core$Debug$log, x, x);
-		}(_p4));
+var _user$project$Main$getQuestionTextHTML = function (q) {
+	return _user$project$TextToHtml$textToHtml(
+		A3(_user$project$Utils$getDefault, _user$project$Data$questionText, 'not written yet', q));
 };
 var _user$project$Main$hasSeen = F2(
 	function (model, x) {
@@ -94,43 +22,68 @@ var _user$project$Main$getAvailable = function (model) {
 		},
 		_user$project$Data$allQuestions);
 };
+var _user$project$Main$whatIsLeft = function (model) {
+	var numLeft = _elm_lang$core$List$length(
+		_user$project$Main$getAvailable(model));
+	return _elm_lang$core$Native_Utils.eq(numLeft, 0) ? 'You\'ve solved everything!' : A2(
+		_elm_lang$core$Basics_ops['++'],
+		'You have ',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(numLeft),
+			A2(_elm_lang$core$Basics_ops['++'], ' available unsolved questions. ', ' Go back to the main page to see them.')));
+};
+var _user$project$Main$solvedElement = F2(
+	function (model, q) {
+		return A2(_user$project$Main$hasSeen, model, q) ? {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Solved'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_user$project$Main$whatIsLeft(model)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		} : {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Unsolved'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		};
+	});
 var _user$project$Main$showAvailable = function (x) {
 	return _elm_lang$html$Html$text(
 		A3(_user$project$Utils$getDefault, _user$project$Data$questionName, 'not named yet', x));
 };
 var _user$project$Main$availableDefault = _elm_lang$html$Html$text('You\'ve solved everything!');
 var _user$project$Main$solvedDefault = _elm_lang$html$Html$text('None yet.');
-var _user$project$Main$intersperseBreaks = _elm_lang$core$List$intersperse(
-	A2(
-		_elm_lang$html$Html$br,
-		{ctor: '[]'},
-		{ctor: '[]'}));
-var _user$project$Main$replaceNewlinesWithBreaks = function (s) {
-	return _user$project$Main$intersperseBreaks(
-		A2(
-			_elm_lang$core$List$map,
-			_elm_lang$html$Html$text,
-			A2(_elm_lang$core$String$split, '\n', s)));
-};
-var _user$project$Main$textToHtml = function (x) {
-	var err = _elm_lang$html$Html$text('This case is literally impossible if this function is being used correctly.');
-	var uselessItemToSatisfyCompiler = A2(
-		_elm_lang$html$Html$br,
-		{ctor: '[]'},
-		{ctor: '[]'});
-	var texts = _user$project$Main$findText(x);
-	var pre = _user$project$Main$findPre(x);
-	return A4(
-		_user$project$Main$interspersePre,
-		A2(_elm_lang$core$List$map, _user$project$Main$toPre, pre),
-		uselessItemToSatisfyCompiler,
-		err,
-		A2(_elm_lang$core$List$map, _user$project$Main$replaceNewlinesWithBreaks, texts));
-};
-var _user$project$Main$getQuestionTextHTML = function (q) {
-	return _user$project$Main$textToHtml(
-		A3(_user$project$Utils$getDefault, _user$project$Data$questionText, 'not written yet', q));
-};
 var _user$project$Main$getName = function (x) {
 	return A3(_user$project$Utils$getDefault, _user$project$Data$questionName, 'not named yet', x);
 };
@@ -139,41 +92,39 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p5 = msg;
-		if (_p5.ctor === 'TryAnswer') {
-			var _p6 = _p5._0;
-			if ((!A2(_user$project$Main$hasSeen, model, _p6)) && _elm_lang$core$Native_Utils.eq(
-				_p5._1,
-				A3(_user$project$Utils$getDefault, _user$project$Data$correctAnswers, '0', _p6))) {
-				var newModel = _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						seen: {ctor: '::', _0: _p6, _1: model.seen}
-					});
-				return {
-					ctor: '_Tuple2',
-					_0: newModel,
-					_1: _user$project$LocalStorage$setStorage(
-						_user$project$Model$encode(newModel))
-				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		var newModel = function () {
+			var _p0 = msg;
+			switch (_p0.ctor) {
+				case 'TryAnswer':
+					var _p1 = _p0._0;
+					return ((!A2(_user$project$Main$hasSeen, model, _p1)) && _elm_lang$core$Native_Utils.eq(
+						_p0._1,
+						A3(_user$project$Utils$getDefault, _user$project$Data$correctAnswers, '0', _p1))) ? _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							seen: {ctor: '::', _0: _p1, _1: model.seen}
+						}) : model;
+				case 'Goto':
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{page: _p0._0});
+				default:
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{colorScheme: _p0._0});
 			}
-		} else {
-			var newModel = _elm_lang$core$Native_Utils.update(
-				model,
-				{page: _p5._0});
-			return {
-				ctor: '_Tuple2',
-				_0: newModel,
-				_1: _user$project$LocalStorage$setStorage(
-					_user$project$Model$encode(newModel))
-			};
-		}
+		}();
+		return {
+			ctor: '_Tuple2',
+			_0: newModel,
+			_1: _user$project$LocalStorage$setStorage(
+				_user$project$Model$encode(newModel))
+		};
 	});
 var _user$project$Main$initModel = {
 	seen: {ctor: '[]'},
-	page: _user$project$Model$MainPage
+	page: _user$project$Model$MainPage,
+	colorScheme: _user$project$ColorScheme$GreenOnBlack
 };
 var _user$project$Main$init = function (savedModel) {
 	return {
@@ -184,6 +135,49 @@ var _user$project$Main$init = function (savedModel) {
 			A2(_elm_lang$core$Maybe$map, _user$project$Model$decode, savedModel)),
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
+};
+var _user$project$Main$SwitchColorScheme = function (a) {
+	return {ctor: 'SwitchColorScheme', _0: a};
+};
+var _user$project$Main$switchColorSchemeHtml = function (cs) {
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'color', _1: 'blue'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Main$SwitchColorScheme(cs)),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Set style to ',
+					_user$project$ColorScheme$toDisplayString(cs))),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$switchColorSchemeAllHtml = function (cs) {
+	return A2(
+		_elm_lang$core$List$map,
+		_user$project$Main$switchColorSchemeHtml,
+		A2(
+			_elm_lang$core$List$filter,
+			F2(
+				function (x, y) {
+					return !_elm_lang$core$Native_Utils.eq(x, y);
+				})(cs),
+			_user$project$ColorScheme$colorSchemes));
 };
 var _user$project$Main$Goto = function (a) {
 	return {ctor: 'Goto', _0: a};
@@ -231,7 +225,7 @@ var _user$project$Main$questionLinks = F2(
 					_1: {ctor: '[]'}
 				});
 		}(
-			_user$project$Main$intersperseBreaks(
+			_user$project$Utils$intersperseBreaks(
 				A2(
 					_elm_lang$core$List$map,
 					_user$project$Main$showQuestionLink,
@@ -274,8 +268,8 @@ var _user$project$Main$TryAnswer = F2(
 		return {ctor: 'TryAnswer', _0: a, _1: b};
 	});
 var _user$project$Main$view = function (model) {
-	var _p7 = model.page;
-	if (_p7.ctor === 'MainPage') {
+	var _p2 = model.page;
+	if (_p2.ctor === 'MainPage') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
@@ -283,60 +277,91 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h1,
+					_0: A3(
+						_elm_lang$html$Html$node,
+						'style',
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('= ?'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_user$project$Main$solved(model),
-					_user$project$Main$available(model))));
-	} else {
-		var _p8 = _p7._0;
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h1,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('= ?'),
+							_0: _user$project$ColorScheme$toCssStyle(
+								_user$project$ColorScheme$getStyle(model.colorScheme)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$backToMain,
-						_1: {
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('= ?'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$Main$solved(model),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Main$available(model),
+						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h2,
+								_elm_lang$html$Html$br,
 								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										_user$project$Main$getName(_p8)),
-									_1: {ctor: '[]'}
-								}),
+								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$h3,
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: _user$project$Main$switchColorSchemeAllHtml(model.colorScheme)
+							}
+						}))));
+	} else {
+		var _p3 = _p2._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A3(
+						_elm_lang$html$Html$node,
+						'style',
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _user$project$ColorScheme$toCssStyle(
+								_user$project$ColorScheme$getStyle(model.colorScheme)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('= ?'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$backToMain,
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$h2,
 									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html$text(
-											A2(_user$project$Main$hasSeen, model, _p8) ? 'Solved' : 'Unsolved'),
+											_user$project$Main$getName(_p3)),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -346,31 +371,51 @@ var _user$project$Main$view = function (model) {
 				},
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_user$project$Main$getQuestionTextHTML(_p8),
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
+					A2(_user$project$Main$solvedElement, model, _p3),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Main$getQuestionTextHTML(_p3),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$placeholder('Answer?'),
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Answer?'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(
+													_user$project$Main$TryAnswer(_p3)),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(
-											_user$project$Main$TryAnswer(_p8)),
-										_1: {ctor: '[]'}
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
 									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					})));
+								}
+							},
+							_user$project$Main$switchColorSchemeAllHtml(model.colorScheme))))));
 	}
 };
 var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
@@ -386,23 +431,28 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 					_elm_lang$core$Maybe$Just,
 					A2(
 						_elm_lang$core$Json_Decode$andThen,
-						function (page) {
+						function (colorScheme) {
 							return A2(
 								_elm_lang$core$Json_Decode$andThen,
-								function (seen) {
-									return _elm_lang$core$Json_Decode$succeed(
-										{page: page, seen: seen});
+								function (page) {
+									return A2(
+										_elm_lang$core$Json_Decode$andThen,
+										function (seen) {
+											return _elm_lang$core$Json_Decode$succeed(
+												{colorScheme: colorScheme, page: page, seen: seen});
+										},
+										A2(
+											_elm_lang$core$Json_Decode$field,
+											'seen',
+											_elm_lang$core$Json_Decode$list(
+												_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool))));
 								},
 								A2(
 									_elm_lang$core$Json_Decode$field,
-									'seen',
-									_elm_lang$core$Json_Decode$list(
-										_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool))));
+									'page',
+									_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool)));
 						},
-						A2(
-							_elm_lang$core$Json_Decode$field,
-							'page',
-							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool)))),
+						A2(_elm_lang$core$Json_Decode$field, 'colorScheme', _elm_lang$core$Json_Decode$string))),
 				_1: {ctor: '[]'}
 			}
 		}));

@@ -7,8 +7,10 @@ import Model exposing (
   JSModel, encode, decode)
 import LocalStorage exposing (setStorage)
 import Data exposing (questionName, questionText, correctAnswers, allQuestions)
-import Utils exposing (listDefault, getDefault, applyToEach, sortBoolLists)
-import Regex exposing (Regex)
+import TextToHtml exposing (textToHtml)
+import ColorScheme exposing (ColorScheme)
+import Utils exposing (listDefault, getDefault, applyToEach,
+  sortBoolLists, intersperseBreaks)
 
 main : Program (Maybe JSModel) Model Msg
 main =
@@ -20,32 +22,34 @@ main =
     }
 
 initModel : Model
-initModel = {seen = [], page = MainPage}
+initModel = {seen = [], page = MainPage, colorScheme = ColorScheme.GreenOnBlack}
 
 init : Maybe JSModel -> (Model, Cmd Msg)
 init savedModel = (
   Maybe.withDefault initModel (Maybe.map decode savedModel),
   Cmd.none)
 
-type Msg = TryAnswer QuestionId String | Goto Page
+type Msg = TryAnswer QuestionId String
+  | Goto Page
+  | SwitchColorScheme ColorScheme
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-  case msg of
-    TryAnswer q answer -> if
-      not (hasSeen model q) &&
-      answer == getDefault correctAnswers "0" q
-      then
-        let
-          newModel = {model | seen = q :: model.seen}
-        in
-          (newModel, setStorage (encode newModel))
-      else (model, Cmd.none)
-    Goto p ->
-      let
-        newModel = {model | page = p}
-      in
-        (newModel, setStorage (encode newModel))
+  let newModel =
+    case msg of
+      TryAnswer q answer -> if
+        not (hasSeen model q) &&
+        answer == getDefault correctAnswers "0" q
+        then
+          {model | seen = q :: model.seen}
+        else
+          model
+      Goto p ->
+        {model | page = p}
+      SwitchColorScheme cs ->
+        {model | colorScheme = cs}
+  in
+    (newModel, setStorage (encode newModel))
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -61,9 +65,6 @@ linkTo p s
 
 showQuestionLink : QuestionId -> Html Msg
 showQuestionLink x = linkTo (Question x) (getName x)
-
-intersperseBreaks : List (Html Msg) -> List (Html Msg)
-intersperseBreaks = List.intersperse (br [] [])
 
 questionLinks : List QuestionId -> Html Msg -> List (Html Msg)
 questionLinks l default
@@ -101,65 +102,55 @@ getAvailable model =
     List.all (\y -> y == x || hasSeen model y)
     (applyToEach (always False) x))
 
-replaceNewlinesWithBreaks : String -> List (Html Msg)
-replaceNewlinesWithBreaks s = s |> String.split "\n" |> List.map text
-   |> intersperseBreaks
-
-preRegex : Regex
-preRegex = Regex.regex "<pre>\n[^<>]+\n</pre>"
-
-innerPreRegex : Regex
-innerPreRegex = Regex.regex "<pre>\n([^<>]+)\n</pre>"
-
-findPreContent : String -> String
-findPreContent = Regex.find (Regex.AtMost 1) innerPreRegex >> List.head
-  >> Maybe.andThen (.submatches >> List.head) >> Maybe.andThen (\x -> x)
-  >> Maybe.withDefault "oops?"
-
-findPre : String -> List String
-findPre = Regex.find Regex.All preRegex >> List.map (.match >> findPreContent)
-
-findText : String -> List String
-findText = (\x -> Debug.log x x) >> Regex.split Regex.All preRegex
-
-toPre : String -> Html Msg
-toPre x = pre [] [text x]
-
-interspersePre : List x -> x -> x -> List (List x) -> List x
-interspersePre pre useless err texts = List.map2 (::) (useless :: pre) texts
-  |> List.concat |> List.tail |> Maybe.withDefault [err]
-
-textToHtml : String -> List (Html Msg)
-textToHtml x =
-  let
-    pre = findPre x
-    texts = findText x
-    uselessItemToSatisfyCompiler = br [] []
-    err = text "This case is literally impossible if this function is being used correctly."
-  in
-    texts |> List.map replaceNewlinesWithBreaks
-    |> interspersePre (List.map toPre pre) uselessItemToSatisfyCompiler err
-
 getQuestionTextHTML : QuestionId -> List (Html Msg)
 getQuestionTextHTML q =
   q |> getDefault questionText "not written yet"
   |> textToHtml
 
+switchColorSchemeHtml : ColorScheme -> Html Msg
+switchColorSchemeHtml cs = a
+  [style [("color", "blue")], onClick (SwitchColorScheme cs)]
+  [text ("Set style to " ++ ColorScheme.toDisplayString cs)]
+
+switchColorSchemeAllHtml : ColorScheme -> List (Html Msg)
+switchColorSchemeAllHtml cs = ColorScheme.colorSchemes
+  |> List.filter ((/=) cs)
+  |> List.map switchColorSchemeHtml
+
+whatIsLeft : Model -> String
+whatIsLeft model = let numLeft = List.length (getAvailable model)
+  in
+    if numLeft == 0
+    then "You've solved everything!"
+    else "You have " ++ toString numLeft ++ " available unsolved questions. " ++
+      " Go back to the main page to see them."
+
+solvedElement : Model -> QuestionId -> List (Html Msg)
+solvedElement model q = if hasSeen model q
+  then [h3 [] [text "Solved"], text (whatIsLeft model), br [] [], br [] []]
+  else [h3 [] [text "Unsolved"]]
+
 view : Model -> Html Msg
 view model =
   case model.page of
     MainPage ->
-      div []
-        ([ h1 [] [ text "= ?" ] ] ++ solved model ++ available model)
+      div [] (
+        [
+          node "style" [] [model.colorScheme
+          |> ColorScheme.getStyle |> ColorScheme.toCssStyle],
+          h1 [] [ text "= ?" ]
+        ] ++ solved model ++ available model ++ (
+          br [] [] :: br [] [] :: switchColorSchemeAllHtml model.colorScheme))
     Question q ->
       div [] (
         [
+          node "style" [] [model.colorScheme
+          |> ColorScheme.getStyle |> ColorScheme.toCssStyle],
           h1 [] [ text "= ?" ],
           backToMain,
-          h2 [] [ text (getName q) ],
-          h3 [] [ text (if hasSeen model q then "Solved" else "Unsolved") ]
-        ] ++ getQuestionTextHTML q ++ [
+          h2 [] [ text (getName q) ]
+        ] ++ solvedElement model q ++ getQuestionTextHTML q ++ [
           br [] [],
-          input [ placeholder "Answer?", onInput (TryAnswer q) ] []
-        ]
-        )
+          input [ placeholder "Answer?", onInput (TryAnswer q) ] [],
+          br [] [],
+          br [] []] ++ switchColorSchemeAllHtml model.colorScheme)

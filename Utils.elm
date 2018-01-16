@@ -1,6 +1,7 @@
 module Utils exposing (listDefault, getDefault, applyToEach,
-  boolToInt, sortBoolLists)
+  boolToInt, sortBoolLists, intersperseBreaks)
 import EveryDict exposing (EveryDict)
+import Html exposing (Html, br)
 
 listDefault : List x -> List x -> List x
 listDefault xs ys = case xs of
@@ -20,3 +21,6 @@ boolToInt b = if b then 1 else 0
 
 sortBoolLists : List (List Bool) -> List (List Bool)
 sortBoolLists = List.sortBy (List.map boolToInt)
+
+intersperseBreaks : List (Html msg) -> List (Html msg)
+intersperseBreaks = List.intersperse (br [] [])

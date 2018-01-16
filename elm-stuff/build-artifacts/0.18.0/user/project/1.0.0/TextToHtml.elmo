@@ -1,0 +1,90 @@
+var _user$project$TextToHtml$interspersePre = F4(
+	function (pre, useless, err, texts) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			{
+				ctor: '::',
+				_0: err,
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$List$tail(
+				_elm_lang$core$List$concat(
+					A3(
+						_elm_lang$core$List$map2,
+						F2(
+							function (x, y) {
+								return {ctor: '::', _0: x, _1: y};
+							}),
+						{ctor: '::', _0: useless, _1: pre},
+						texts))));
+	});
+var _user$project$TextToHtml$toPre = function (x) {
+	return A2(
+		_elm_lang$html$Html$pre,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(x),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$TextToHtml$innerPreRegex = _elm_lang$core$Regex$regex('<pre>\n([^<>]+)\n</pre>');
+var _user$project$TextToHtml$findPreContent = function (_p0) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		'oops?',
+		A2(
+			_elm_lang$core$Maybe$andThen,
+			function (x) {
+				return x;
+			},
+			A2(
+				_elm_lang$core$Maybe$andThen,
+				function (_p1) {
+					return _elm_lang$core$List$head(
+						function (_) {
+							return _.submatches;
+						}(_p1));
+				},
+				_elm_lang$core$List$head(
+					A3(
+						_elm_lang$core$Regex$find,
+						_elm_lang$core$Regex$AtMost(1),
+						_user$project$TextToHtml$innerPreRegex,
+						_p0)))));
+};
+var _user$project$TextToHtml$preRegex = _elm_lang$core$Regex$regex('<pre>\n[^<>]+\n</pre>');
+var _user$project$TextToHtml$findPre = function (_p2) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (_p3) {
+			return _user$project$TextToHtml$findPreContent(
+				function (_) {
+					return _.match;
+				}(_p3));
+		},
+		A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, _user$project$TextToHtml$preRegex, _p2));
+};
+var _user$project$TextToHtml$findText = A2(_elm_lang$core$Regex$split, _elm_lang$core$Regex$All, _user$project$TextToHtml$preRegex);
+var _user$project$TextToHtml$replaceNewlinesWithBreaks = function (s) {
+	return _user$project$Utils$intersperseBreaks(
+		A2(
+			_elm_lang$core$List$map,
+			_elm_lang$html$Html$text,
+			A2(_elm_lang$core$String$split, '\n', s)));
+};
+var _user$project$TextToHtml$textToHtml = function (x) {
+	var err = _elm_lang$html$Html$text('This case is literally impossible if this function is being used correctly.');
+	var uselessItemToSatisfyCompiler = A2(
+		_elm_lang$html$Html$br,
+		{ctor: '[]'},
+		{ctor: '[]'});
+	var texts = _user$project$TextToHtml$findText(x);
+	var pre = _user$project$TextToHtml$findPre(x);
+	return A4(
+		_user$project$TextToHtml$interspersePre,
+		A2(_elm_lang$core$List$map, _user$project$TextToHtml$toPre, pre),
+		uselessItemToSatisfyCompiler,
+		err,
+		A2(_elm_lang$core$List$map, _user$project$TextToHtml$replaceNewlinesWithBreaks, texts));
+};

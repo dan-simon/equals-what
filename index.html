@@ -16,6 +16,9 @@
 <script type="text/javascript">
 var storedState = localStorage.getItem('elm-save');
 var startingState = storedState ? JSON.parse(storedState) : null;
+if (!('colorScheme' in startingState)) {
+  startingState.colorScheme = 'green-on-black';
+}
 var app = Elm.Main.fullscreen(startingState);
 app.ports.setStorage.subscribe(function(state) {
     localStorage.setItem('elm-save', JSON.stringify(state));

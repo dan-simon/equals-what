@@ -25,11 +25,17 @@ questionName = EveryDict.fromList [
 questionText : EveryDict QuestionId String
 questionText = EveryDict.fromList [
   ([False, False, False, False], "1 + 2 + ... + 1000 = ?"),
-  ([False, False, False, True], """x is a 10x10x10x10 array
+  ([False, False, False, True], """Let us define the sum, product, minimum, and maximum of multidimensional arrays not as applying to all the numbers in the array and returning a number, but as applying to each 1D array in the array and replacing it by the appropriate number.
+So, for example, the sum of the 2D array [[1, 2], [3, 4]] is not 10 (the sum of all the numbers in the array), but rather [3, 7] (the array of sums of the 1D items).
+Similarly, the product of [[[1, 2], [3, 4]], [[5, 6], [7, 8]]] is [[2, 6], [12, 56]].
+Notice that taking the sum, product, minimum, or maximum of an array reduces its dimension by 1.
+As a consequence, taking the sum, product, minimum, or maximum of an n-dimensional array n times will give a zero-dimensional result, that is, just a number.
+
+x is a (zero-indexed) 10x10x10x10 array (and thus is 4D)
 x[i][j][k][l] = 1000 * i + 100 * j + 10 * k + l
-(minimum . map minimum . map (map minimum) . map (map (map minimum))) x = 0
-(maximum . map maximum . map (map maximum) . map (map (map maximum))) x = 9999
-(minimum . map maximum . map (map sum) . map (map (map product))) x = ?"""),
+the minimum of the minimum of the minimum of the minimum of x = 0
+the maximum of the maximum of the maximum of the maximum of x = 9999
+the minimum of the maximum of the sum of the product of x = ?"""),
   ([False, False, True, False], "first (positive) number that is 1 mod 5, 0 mod 11, 20 mod 29, 35 mod 43, 48 mod 59, and 130 mod 137 = ?"),
   ([False, False, True, True], """The perimeter of a 1x2 rectangle = 6
 The surface area of a 1x2x3 solid = 22
@@ -488,7 +494,7 @@ However, being humans, they do not have command of either the art of navigating 
 
 Thus, although they only take 1 day to go through a grassland location, they take 2 to go through a forest location, and 3 to go through a mountain location. They cannot go through oceans at all.
 
-Unfortunately, this is a magic-free setting: there is no teleportation, and they can only go from a location to the one immediately below, above, the the left, or to the right.
+Unfortunately, this is a magic-free setting: there is no teleportation, and they can only go from a location to the one immediately below, above, to the left, or to the right.
 
 Smallest number of days in which they can get from a to b = 28. A route is shown below:
 <pre>

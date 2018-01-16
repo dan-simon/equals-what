@@ -9379,45 +9379,123 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Model$encode = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			page: function () {
-				var _p0 = model.page;
-				if (_p0.ctor === 'MainPage') {
-					return {ctor: '[]'};
-				} else {
-					return _p0._0;
-				}
-			}()
-		});
+var _user$project$ColorScheme$surroundCss = function (s) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'body {',
+		A2(_elm_lang$core$Basics_ops['++'], s, '}'));
 };
-var _user$project$Model$Model = F2(
-	function (a, b) {
-		return {seen: a, page: b};
+var _user$project$ColorScheme$toCssStyle = function (l) {
+	return _elm_lang$html$Html$text(
+		_user$project$ColorScheme$surroundCss(
+			A2(
+				_elm_lang$core$String$join,
+				'; ',
+				A2(
+					_elm_lang$core$List$map,
+					function (_p0) {
+						var _p1 = _p0;
+						return A2(
+							_elm_lang$core$Basics_ops['++'],
+							_p1._0,
+							A2(_elm_lang$core$Basics_ops['++'], ': ', _p1._1));
+					},
+					l))));
+};
+var _user$project$ColorScheme$getStyle = function (s) {
+	var _p2 = s;
+	if (_p2.ctor === 'GreenOnBlack') {
+		return {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'color', _1: 'green'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'black'},
+				_1: {ctor: '[]'}
+			}
+		};
+	} else {
+		return {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'color', _1: 'black'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'white'},
+				_1: {ctor: '[]'}
+			}
+		};
+	}
+};
+var _user$project$ColorScheme$toDisplayString = function (s) {
+	var _p3 = s;
+	if (_p3.ctor === 'GreenOnBlack') {
+		return 'green on black';
+	} else {
+		return 'black on white';
+	}
+};
+var _user$project$ColorScheme$toString = function (s) {
+	var _p4 = s;
+	if (_p4.ctor === 'GreenOnBlack') {
+		return 'green-on-black';
+	} else {
+		return 'black-on-white';
+	}
+};
+var _user$project$ColorScheme$BlackOnWhite = {ctor: 'BlackOnWhite'};
+var _user$project$ColorScheme$GreenOnBlack = {ctor: 'GreenOnBlack'};
+var _user$project$ColorScheme$colorSchemes = {
+	ctor: '::',
+	_0: _user$project$ColorScheme$GreenOnBlack,
+	_1: {
+		ctor: '::',
+		_0: _user$project$ColorScheme$BlackOnWhite,
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$ColorScheme$fromString = function (s) {
+	return _elm_lang$core$Native_Utils.eq(s, 'black-on-white') ? _user$project$ColorScheme$BlackOnWhite : _user$project$ColorScheme$GreenOnBlack;
+};
+
+var _user$project$Model$encode = function (model) {
+	return {
+		seen: model.seen,
+		page: function () {
+			var _p0 = model.page;
+			if (_p0.ctor === 'MainPage') {
+				return {ctor: '[]'};
+			} else {
+				return _p0._0;
+			}
+		}(),
+		colorScheme: _user$project$ColorScheme$toString(model.colorScheme)
+	};
+};
+var _user$project$Model$Model = F3(
+	function (a, b, c) {
+		return {seen: a, page: b, colorScheme: c};
 	});
-var _user$project$Model$JSModel = F2(
-	function (a, b) {
-		return {seen: a, page: b};
+var _user$project$Model$JSModel = F3(
+	function (a, b, c) {
+		return {seen: a, page: b, colorScheme: c};
 	});
 var _user$project$Model$Question = function (a) {
 	return {ctor: 'Question', _0: a};
 };
 var _user$project$Model$MainPage = {ctor: 'MainPage'};
 var _user$project$Model$decode = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			page: function () {
-				var _p1 = model.page;
-				if (_p1.ctor === '[]') {
-					return _user$project$Model$MainPage;
-				} else {
-					return _user$project$Model$Question(_p1);
-				}
-			}()
-		});
+	return {
+		seen: model.seen,
+		page: function () {
+			var _p1 = model.page;
+			if (_p1.ctor === '[]') {
+				return _user$project$Model$MainPage;
+			} else {
+				return _user$project$Model$Question(_p1);
+			}
+		}(),
+		colorScheme: _user$project$ColorScheme$fromString(model.colorScheme)
+	};
 };
 
 var _user$project$Data$allQuestions = {
@@ -10172,7 +10250,7 @@ var _user$project$Data$questionText = _eeue56$elm_all_dict$EveryDict$fromList(
 						}
 					}
 				},
-				_1: 'x is a 10x10x10x10 array\nx[i][j][k][l] = 1000 * i + 100 * j + 10 * k + l\n(minimum . map minimum . map (map minimum) . map (map (map minimum))) x = 0\n(maximum . map maximum . map (map maximum) . map (map (map maximum))) x = 9999\n(minimum . map maximum . map (map sum) . map (map (map product))) x = ?'
+				_1: 'Let us define the sum, product, minimum, and maximum of multidimensional arrays not as applying to all the numbers in the array and returning a number, but as applying to each 1D array in the array and replacing it by the appropriate number.\nSo, for example, the sum of the 2D array [[1, 2], [3, 4]] is not 10 (the sum of all the numbers in the array), but rather [3, 7] (the array of sums of the 1D items).\nSimilarly, the product of [[[1, 2], [3, 4]], [[5, 6], [7, 8]]] is [[2, 6], [12, 56]].\nNotice that taking the sum, product, minimum, or maximum of an array reduces its dimension by 1.\nAs a consequence, taking the sum, product, minimum, or maximum of an n-dimensional array n times will give a zero-dimensional result, that is, just a number.\n\nx is a (zero-indexed) 10x10x10x10 array (and thus is 4D)\nx[i][j][k][l] = 1000 * i + 100 * j + 10 * k + l\nthe minimum of the minimum of the minimum of the minimum of x = 0\nthe maximum of the maximum of the maximum of the maximum of x = 9999\nthe minimum of the maximum of the sum of the product of x = ?'
 			},
 			_1: {
 				ctor: '::',
@@ -10195,7 +10273,7 @@ var _user$project$Data$questionText = _eeue56$elm_all_dict$EveryDict$fromList(
 							}
 						}
 					},
-					_1: 'first number that is 1 mod 5, 0 mod 11, 20 mod 29, 35 mod 43, 48 mod 59, and 130 mod 137 = ?'
+					_1: 'first (positive) number that is 1 mod 5, 0 mod 11, 20 mod 29, 35 mod 43, 48 mod 59, and 130 mod 137 = ?'
 				},
 				_1: {
 					ctor: '::',
@@ -10425,7 +10503,7 @@ var _user$project$Data$questionText = _eeue56$elm_all_dict$EveryDict$fromList(
 																	}
 																}
 															},
-															_1: 'Here is an image of an island (~ representing ocean, space representing grassland, * representing mountains. and # representing other terrain):\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~#### *     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~#### ***   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~####****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~###******   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**a***   ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####****    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####***    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~#####*      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#b#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nSome humans are traveling from location a to location b. They want to get from a to b as quickly as possible, due to the importance of finding the Jewel of Fortune located at b.\n\nHowever, being humans, they do not have command of either the art of navigating in woods (a skill mostly elves have), climbing mountains (a skill of the dwarves), or swimming/having gills (that would be merpeople).\n\nThus, although they only take 1 day to go through a grassland location, they take 2 to go through a forest location, and 3 to go through a mountain location. They cannot go through oceans at all.\n\nUnfortunately, this is a magic-free setting: there is no teleportation, and they can only go from a location to the one immediately below, above, the the left, or to the right.\n\nSmallest number of days in which they can get from a to b = 28. A route is shown below:\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~#### *     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~#### ***   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~####****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~###******   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**a***   ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**|**    ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|**   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|*    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~#####* |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####   |   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####   |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####+--+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####|  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#b---+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nThis route goes through 8 grassland locations, 4 mountain locations, and 4 forest locations, and thus takes 28 days.\n\nThe humans end up taking this route, but unfortunately, someone else took the Jewel of Fortune before they could steal... uh, \"buy\" it from the elves.\n\nNow, the humans have taken a boat to a new island, where they are in the hospitality of the elves at point a and attempting to get the Staff of Power, which is at point b. They have to leave soon, before news comes from the elves on the earlier island about what happened.\n\nHere is a map of the new island (together with a few others near it):\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~\n~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###### ~~~~~~~~~~~\n~~~~~~~~~~~#####  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~\n~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~~\n~~~~~~~~~~####    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~\n~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     ~~~~~~~##~~\n~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~####~~\n~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####  b   ~~~######~~\n~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      #~########~~\n~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####      ##########~~\n~~~~~~~#####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      #########  ~~\n~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     ########   ~~~\n~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     #########   ~~~\n~~~~~~~#####   ~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~#####    #~#######    ~~~\n~~~~~~~#####  ~~~~~~~~#####~~~~~~~~~~~~~~~~~#####    ~~~~######   ~~~~\n~~~~~~~######~~~~~~~~#######~~~~~~~~~~~~~~~#####    ~~~~~#####    ~~~~\n~~~~~~~####~~~~~~~~~######  ~~~~~~~~~~~~~~#####    ~~~~~######   ~~~~~\n~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~#####    ~~~~~~######   ~~~~~\n~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~~~#####    ~~~~~~~######  ~~~~~~\n~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~#####      ~~~~~~~#######~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~####       ~~~~~~~~######~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~#####        ~~~~~~~~#####~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ~~~~##### ***      ~~~~~~~~####~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ~~##### ******    ~~~~~~~~~###~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ###### *******    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      #### *********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######   ##### **********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~############# ***********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~########### ************    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~##########*************    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~#####*************     ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####**************      ##~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####**************       ##~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###***************        #~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###**************          ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###**************          ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~##****************         ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###****************         ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###****************        ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###******************      ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~##********************     ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~##*********************    ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###*********************    ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###*********************   ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###***********  *******    ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###********      ******    ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####******         *****   ~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####****           ****    ~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####                **    ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~#####        ######        ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####      ~~~~######      ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~#####      ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~#####    ~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~###### ~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~\n~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~\n~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####~~~~~~~~~~~\n~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~~~###### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~~~##### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~\n~~~~~~~~~~~~~###### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~\n~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~\n~~~~~~~~~~~~~#####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####~~~~~~~~~~~~~\n~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~\n~~~~~~~~~~~~##a##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nSmallest number of days in which they can get from a to b = ?'
+															_1: 'Here is an image of an island (~ representing ocean, space representing grassland, * representing mountains. and # representing other terrain):\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~#### *     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~#### ***   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~####****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~###******   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**a***   ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####****    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####***    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~#####*      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#b#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nSome humans are traveling from location a to location b. They want to get from a to b as quickly as possible, due to the importance of finding the Jewel of Fortune located at b.\n\nHowever, being humans, they do not have command of either the art of navigating in woods (a skill mostly elves have), climbing mountains (a skill of the dwarves), or swimming/having gills (that would be merpeople).\n\nThus, although they only take 1 day to go through a grassland location, they take 2 to go through a forest location, and 3 to go through a mountain location. They cannot go through oceans at all.\n\nUnfortunately, this is a magic-free setting: there is no teleportation, and they can only go from a location to the one immediately below, above, to the left, or to the right.\n\nSmallest number of days in which they can get from a to b = 28. A route is shown below:\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~#### *     ~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~#### ***   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~####****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####*****   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~###******   ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####*****    ~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**a***   ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~###**|**    ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|**   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|*    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~####**|    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~#####* |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####   |   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####   |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####+--+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####|  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#b---+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nThis route goes through 8 grassland locations, 4 mountain locations, and 4 forest locations, and thus takes 28 days.\n\nThe humans end up taking this route, but unfortunately, someone else took the Jewel of Fortune before they could steal... uh, \"buy\" it from the elves.\n\nNow, the humans have taken a boat to a new island, where they are in the hospitality of the elves at point a and attempting to get the Staff of Power, which is at point b. They have to leave soon, before news comes from the elves on the earlier island about what happened.\n\nHere is a map of the new island (together with a few others near it):\n<pre>\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~\n~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###### ~~~~~~~~~~~\n~~~~~~~~~~~#####  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~\n~~~~~~~~~~#####   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~~\n~~~~~~~~~~####    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~~~\n~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     ~~~~~~~##~~\n~~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      ~~~~~####~~\n~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####  b   ~~~######~~\n~~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      #~########~~\n~~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####      ##########~~\n~~~~~~~#####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####      #########  ~~\n~~~~~~~####      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     ########   ~~~\n~~~~~~~####     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####     #########   ~~~\n~~~~~~~#####   ~~~~~~~~~~#~~~~~~~~~~~~~~~~~~~#####    #~#######    ~~~\n~~~~~~~#####  ~~~~~~~~#####~~~~~~~~~~~~~~~~~#####    ~~~~######   ~~~~\n~~~~~~~######~~~~~~~~#######~~~~~~~~~~~~~~~#####    ~~~~~#####    ~~~~\n~~~~~~~####~~~~~~~~~######  ~~~~~~~~~~~~~~#####    ~~~~~######   ~~~~~\n~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~~~~~#####    ~~~~~~######   ~~~~~\n~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~~~#####    ~~~~~~~######  ~~~~~~\n~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~~~~#####      ~~~~~~~#######~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~~~####       ~~~~~~~~######~~~~~~~~\n~~~~~~~~~~~~~~~~~~~####     ~~~~~~~#####        ~~~~~~~~#####~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ~~~~##### ***      ~~~~~~~~####~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ~~##### ******    ~~~~~~~~~###~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      ###### *******    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~#####      #### *********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######   ##### **********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~############# ***********    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~########### ************    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~##########*************    ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~#####*************     ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####**************      ##~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~####**************       ##~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###***************        #~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###**************          ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~###**************          ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~##****************         ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###****************         ~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###****************        ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~###******************      ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~##********************     ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~##*********************    ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###*********************    ~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###*********************   ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###***********  *******    ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~###********      ******    ~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####******         *****   ~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####****           ****    ~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~####                **    ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~#####        ######        ~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~####      ~~~~######      ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~#####    ~~~~~~~#####      ~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~#####   ~~~~~~~~~#####    ~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~###### ~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~\n~~~~~~~~~~~~~~~~#######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~\n~~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####~~~~~~~~~~~\n~~~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~~~###### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~\n~~~~~~~~~~~~~~##### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######~~~~~~~~~~~\n~~~~~~~~~~~~~###### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~\n~~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~######~~~~~~~~~~~~\n~~~~~~~~~~~~~#####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#####~~~~~~~~~~~~~\n~~~~~~~~~~~~######~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~\n~~~~~~~~~~~~##a##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n</pre>\nSmallest number of days in which they can get from a to b = ?'
 														},
 														_1: {
 															ctor: '::',
@@ -10914,10 +10992,16 @@ var _user$project$LocalStorage$setStorage = _elm_lang$core$Native_Platform.outgo
 			page: _elm_lang$core$Native_List.toArray(v.page).map(
 				function (v) {
 					return v;
-				})
+				}),
+			colorScheme: v.colorScheme
 		};
 	});
 
+var _user$project$Utils$intersperseBreaks = _elm_lang$core$List$intersperse(
+	A2(
+		_elm_lang$html$Html$br,
+		{ctor: '[]'},
+		{ctor: '[]'}));
 var _user$project$Utils$boolToInt = function (b) {
 	return b ? 1 : 0;
 };
@@ -10977,7 +11061,7 @@ var _user$project$Utils$listDefault = F2(
 		}
 	});
 
-var _user$project$Main$interspersePre = F4(
+var _user$project$TextToHtml$interspersePre = F4(
 	function (pre, useless, err, texts) {
 		return A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -10997,7 +11081,7 @@ var _user$project$Main$interspersePre = F4(
 						{ctor: '::', _0: useless, _1: pre},
 						texts))));
 	});
-var _user$project$Main$toPre = function (x) {
+var _user$project$TextToHtml$toPre = function (x) {
 	return A2(
 		_elm_lang$html$Html$pre,
 		{ctor: '[]'},
@@ -11007,8 +11091,8 @@ var _user$project$Main$toPre = function (x) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Main$innerPreRegex = _elm_lang$core$Regex$regex('<pre>\n([^<>]+)\n</pre>');
-var _user$project$Main$findPreContent = function (_p0) {
+var _user$project$TextToHtml$innerPreRegex = _elm_lang$core$Regex$regex('<pre>\n([^<>]+)\n</pre>');
+var _user$project$TextToHtml$findPreContent = function (_p0) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		'oops?',
@@ -11029,29 +11113,48 @@ var _user$project$Main$findPreContent = function (_p0) {
 					A3(
 						_elm_lang$core$Regex$find,
 						_elm_lang$core$Regex$AtMost(1),
-						_user$project$Main$innerPreRegex,
+						_user$project$TextToHtml$innerPreRegex,
 						_p0)))));
 };
-var _user$project$Main$preRegex = _elm_lang$core$Regex$regex('<pre>\n[^<>]+\n</pre>');
-var _user$project$Main$findPre = function (_p2) {
+var _user$project$TextToHtml$preRegex = _elm_lang$core$Regex$regex('<pre>\n[^<>]+\n</pre>');
+var _user$project$TextToHtml$findPre = function (_p2) {
 	return A2(
 		_elm_lang$core$List$map,
 		function (_p3) {
-			return _user$project$Main$findPreContent(
+			return _user$project$TextToHtml$findPreContent(
 				function (_) {
 					return _.match;
 				}(_p3));
 		},
-		A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, _user$project$Main$preRegex, _p2));
+		A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, _user$project$TextToHtml$preRegex, _p2));
 };
-var _user$project$Main$findText = function (_p4) {
-	return A3(
-		_elm_lang$core$Regex$split,
-		_elm_lang$core$Regex$All,
-		_user$project$Main$preRegex,
-		function (x) {
-			return A2(_elm_lang$core$Debug$log, x, x);
-		}(_p4));
+var _user$project$TextToHtml$findText = A2(_elm_lang$core$Regex$split, _elm_lang$core$Regex$All, _user$project$TextToHtml$preRegex);
+var _user$project$TextToHtml$replaceNewlinesWithBreaks = function (s) {
+	return _user$project$Utils$intersperseBreaks(
+		A2(
+			_elm_lang$core$List$map,
+			_elm_lang$html$Html$text,
+			A2(_elm_lang$core$String$split, '\n', s)));
+};
+var _user$project$TextToHtml$textToHtml = function (x) {
+	var err = _elm_lang$html$Html$text('This case is literally impossible if this function is being used correctly.');
+	var uselessItemToSatisfyCompiler = A2(
+		_elm_lang$html$Html$br,
+		{ctor: '[]'},
+		{ctor: '[]'});
+	var texts = _user$project$TextToHtml$findText(x);
+	var pre = _user$project$TextToHtml$findPre(x);
+	return A4(
+		_user$project$TextToHtml$interspersePre,
+		A2(_elm_lang$core$List$map, _user$project$TextToHtml$toPre, pre),
+		uselessItemToSatisfyCompiler,
+		err,
+		A2(_elm_lang$core$List$map, _user$project$TextToHtml$replaceNewlinesWithBreaks, texts));
+};
+
+var _user$project$Main$getQuestionTextHTML = function (q) {
+	return _user$project$TextToHtml$textToHtml(
+		A3(_user$project$Utils$getDefault, _user$project$Data$questionText, 'not written yet', q));
 };
 var _user$project$Main$hasSeen = F2(
 	function (model, x) {
@@ -11073,43 +11176,68 @@ var _user$project$Main$getAvailable = function (model) {
 		},
 		_user$project$Data$allQuestions);
 };
+var _user$project$Main$whatIsLeft = function (model) {
+	var numLeft = _elm_lang$core$List$length(
+		_user$project$Main$getAvailable(model));
+	return _elm_lang$core$Native_Utils.eq(numLeft, 0) ? 'You\'ve solved everything!' : A2(
+		_elm_lang$core$Basics_ops['++'],
+		'You have ',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(numLeft),
+			A2(_elm_lang$core$Basics_ops['++'], ' available unsolved questions. ', ' Go back to the main page to see them.')));
+};
+var _user$project$Main$solvedElement = F2(
+	function (model, q) {
+		return A2(_user$project$Main$hasSeen, model, q) ? {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Solved'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_user$project$Main$whatIsLeft(model)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		} : {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Unsolved'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		};
+	});
 var _user$project$Main$showAvailable = function (x) {
 	return _elm_lang$html$Html$text(
 		A3(_user$project$Utils$getDefault, _user$project$Data$questionName, 'not named yet', x));
 };
 var _user$project$Main$availableDefault = _elm_lang$html$Html$text('You\'ve solved everything!');
 var _user$project$Main$solvedDefault = _elm_lang$html$Html$text('None yet.');
-var _user$project$Main$intersperseBreaks = _elm_lang$core$List$intersperse(
-	A2(
-		_elm_lang$html$Html$br,
-		{ctor: '[]'},
-		{ctor: '[]'}));
-var _user$project$Main$replaceNewlinesWithBreaks = function (s) {
-	return _user$project$Main$intersperseBreaks(
-		A2(
-			_elm_lang$core$List$map,
-			_elm_lang$html$Html$text,
-			A2(_elm_lang$core$String$split, '\n', s)));
-};
-var _user$project$Main$textToHtml = function (x) {
-	var err = _elm_lang$html$Html$text('This case is literally impossible if this function is being used correctly.');
-	var uselessItemToSatisfyCompiler = A2(
-		_elm_lang$html$Html$br,
-		{ctor: '[]'},
-		{ctor: '[]'});
-	var texts = _user$project$Main$findText(x);
-	var pre = _user$project$Main$findPre(x);
-	return A4(
-		_user$project$Main$interspersePre,
-		A2(_elm_lang$core$List$map, _user$project$Main$toPre, pre),
-		uselessItemToSatisfyCompiler,
-		err,
-		A2(_elm_lang$core$List$map, _user$project$Main$replaceNewlinesWithBreaks, texts));
-};
-var _user$project$Main$getQuestionTextHTML = function (q) {
-	return _user$project$Main$textToHtml(
-		A3(_user$project$Utils$getDefault, _user$project$Data$questionText, 'not written yet', q));
-};
 var _user$project$Main$getName = function (x) {
 	return A3(_user$project$Utils$getDefault, _user$project$Data$questionName, 'not named yet', x);
 };
@@ -11118,41 +11246,39 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p5 = msg;
-		if (_p5.ctor === 'TryAnswer') {
-			var _p6 = _p5._0;
-			if ((!A2(_user$project$Main$hasSeen, model, _p6)) && _elm_lang$core$Native_Utils.eq(
-				_p5._1,
-				A3(_user$project$Utils$getDefault, _user$project$Data$correctAnswers, '0', _p6))) {
-				var newModel = _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						seen: {ctor: '::', _0: _p6, _1: model.seen}
-					});
-				return {
-					ctor: '_Tuple2',
-					_0: newModel,
-					_1: _user$project$LocalStorage$setStorage(
-						_user$project$Model$encode(newModel))
-				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		var newModel = function () {
+			var _p0 = msg;
+			switch (_p0.ctor) {
+				case 'TryAnswer':
+					var _p1 = _p0._0;
+					return ((!A2(_user$project$Main$hasSeen, model, _p1)) && _elm_lang$core$Native_Utils.eq(
+						_p0._1,
+						A3(_user$project$Utils$getDefault, _user$project$Data$correctAnswers, '0', _p1))) ? _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							seen: {ctor: '::', _0: _p1, _1: model.seen}
+						}) : model;
+				case 'Goto':
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{page: _p0._0});
+				default:
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{colorScheme: _p0._0});
 			}
-		} else {
-			var newModel = _elm_lang$core$Native_Utils.update(
-				model,
-				{page: _p5._0});
-			return {
-				ctor: '_Tuple2',
-				_0: newModel,
-				_1: _user$project$LocalStorage$setStorage(
-					_user$project$Model$encode(newModel))
-			};
-		}
+		}();
+		return {
+			ctor: '_Tuple2',
+			_0: newModel,
+			_1: _user$project$LocalStorage$setStorage(
+				_user$project$Model$encode(newModel))
+		};
 	});
 var _user$project$Main$initModel = {
 	seen: {ctor: '[]'},
-	page: _user$project$Model$MainPage
+	page: _user$project$Model$MainPage,
+	colorScheme: _user$project$ColorScheme$GreenOnBlack
 };
 var _user$project$Main$init = function (savedModel) {
 	return {
@@ -11163,6 +11289,49 @@ var _user$project$Main$init = function (savedModel) {
 			A2(_elm_lang$core$Maybe$map, _user$project$Model$decode, savedModel)),
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
+};
+var _user$project$Main$SwitchColorScheme = function (a) {
+	return {ctor: 'SwitchColorScheme', _0: a};
+};
+var _user$project$Main$switchColorSchemeHtml = function (cs) {
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'color', _1: 'blue'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Main$SwitchColorScheme(cs)),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Set style to ',
+					_user$project$ColorScheme$toDisplayString(cs))),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$switchColorSchemeAllHtml = function (cs) {
+	return A2(
+		_elm_lang$core$List$map,
+		_user$project$Main$switchColorSchemeHtml,
+		A2(
+			_elm_lang$core$List$filter,
+			F2(
+				function (x, y) {
+					return !_elm_lang$core$Native_Utils.eq(x, y);
+				})(cs),
+			_user$project$ColorScheme$colorSchemes));
 };
 var _user$project$Main$Goto = function (a) {
 	return {ctor: 'Goto', _0: a};
@@ -11210,7 +11379,7 @@ var _user$project$Main$questionLinks = F2(
 					_1: {ctor: '[]'}
 				});
 		}(
-			_user$project$Main$intersperseBreaks(
+			_user$project$Utils$intersperseBreaks(
 				A2(
 					_elm_lang$core$List$map,
 					_user$project$Main$showQuestionLink,
@@ -11253,8 +11422,8 @@ var _user$project$Main$TryAnswer = F2(
 		return {ctor: 'TryAnswer', _0: a, _1: b};
 	});
 var _user$project$Main$view = function (model) {
-	var _p7 = model.page;
-	if (_p7.ctor === 'MainPage') {
+	var _p2 = model.page;
+	if (_p2.ctor === 'MainPage') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
@@ -11262,60 +11431,91 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h1,
+					_0: A3(
+						_elm_lang$html$Html$node,
+						'style',
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('= ?'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_user$project$Main$solved(model),
-					_user$project$Main$available(model))));
-	} else {
-		var _p8 = _p7._0;
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h1,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('= ?'),
+							_0: _user$project$ColorScheme$toCssStyle(
+								_user$project$ColorScheme$getStyle(model.colorScheme)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$backToMain,
-						_1: {
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('= ?'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$Main$solved(model),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Main$available(model),
+						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h2,
+								_elm_lang$html$Html$br,
 								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										_user$project$Main$getName(_p8)),
-									_1: {ctor: '[]'}
-								}),
+								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$h3,
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: _user$project$Main$switchColorSchemeAllHtml(model.colorScheme)
+							}
+						}))));
+	} else {
+		var _p3 = _p2._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A3(
+						_elm_lang$html$Html$node,
+						'style',
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _user$project$ColorScheme$toCssStyle(
+								_user$project$ColorScheme$getStyle(model.colorScheme)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('= ?'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$backToMain,
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$h2,
 									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html$text(
-											A2(_user$project$Main$hasSeen, model, _p8) ? 'Solved' : 'Unsolved'),
+											_user$project$Main$getName(_p3)),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -11325,31 +11525,51 @@ var _user$project$Main$view = function (model) {
 				},
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_user$project$Main$getQuestionTextHTML(_p8),
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
+					A2(_user$project$Main$solvedElement, model, _p3),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Main$getQuestionTextHTML(_p3),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$placeholder('Answer?'),
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Answer?'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(
+													_user$project$Main$TryAnswer(_p3)),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(
-											_user$project$Main$TryAnswer(_p8)),
-										_1: {ctor: '[]'}
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
 									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					})));
+								}
+							},
+							_user$project$Main$switchColorSchemeAllHtml(model.colorScheme))))));
 	}
 };
 var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
@@ -11365,23 +11585,28 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 					_elm_lang$core$Maybe$Just,
 					A2(
 						_elm_lang$core$Json_Decode$andThen,
-						function (page) {
+						function (colorScheme) {
 							return A2(
 								_elm_lang$core$Json_Decode$andThen,
-								function (seen) {
-									return _elm_lang$core$Json_Decode$succeed(
-										{page: page, seen: seen});
+								function (page) {
+									return A2(
+										_elm_lang$core$Json_Decode$andThen,
+										function (seen) {
+											return _elm_lang$core$Json_Decode$succeed(
+												{colorScheme: colorScheme, page: page, seen: seen});
+										},
+										A2(
+											_elm_lang$core$Json_Decode$field,
+											'seen',
+											_elm_lang$core$Json_Decode$list(
+												_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool))));
 								},
 								A2(
 									_elm_lang$core$Json_Decode$field,
-									'seen',
-									_elm_lang$core$Json_Decode$list(
-										_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool))));
+									'page',
+									_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool)));
 						},
-						A2(
-							_elm_lang$core$Json_Decode$field,
-							'page',
-							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$bool)))),
+						A2(_elm_lang$core$Json_Decode$field, 'colorScheme', _elm_lang$core$Json_Decode$string))),
 				_1: {ctor: '[]'}
 			}
 		}));

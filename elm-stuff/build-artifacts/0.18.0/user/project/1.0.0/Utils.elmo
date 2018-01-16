@@ -1,3 +1,8 @@
+var _user$project$Utils$intersperseBreaks = _elm_lang$core$List$intersperse(
+	A2(
+		_elm_lang$html$Html$br,
+		{ctor: '[]'},
+		{ctor: '[]'}));
 var _user$project$Utils$boolToInt = function (b) {
 	return b ? 1 : 0;
 };
