@@ -87,6 +87,15 @@ var _user$project$Main$solvedDefault = _elm_lang$html$Html$text('None yet.');
 var _user$project$Main$getName = function (x) {
 	return A3(_user$project$Utils$getDefault, _user$project$Data$questionName, 'not named yet', x);
 };
+var _user$project$Main$isDigit = function (c) {
+	return A2(
+		_elm_lang$core$List$member,
+		c,
+		_elm_lang$core$String$toList('1234567890'));
+};
+var _user$project$Main$getDigits = function (x) {
+	return A2(_elm_lang$core$String$filter, _user$project$Main$isDigit, x);
+};
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -98,7 +107,7 @@ var _user$project$Main$update = F2(
 				case 'TryAnswer':
 					var _p1 = _p0._0;
 					return ((!A2(_user$project$Main$hasSeen, model, _p1)) && _elm_lang$core$Native_Utils.eq(
-						_p0._1,
+						_user$project$Main$getDigits(_p0._1),
 						A3(_user$project$Utils$getDefault, _user$project$Data$correctAnswers, '0', _p1))) ? _elm_lang$core$Native_Utils.update(
 						model,
 						{

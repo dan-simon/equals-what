@@ -39,7 +39,7 @@ update msg model =
     case msg of
       TryAnswer q answer -> if
         not (hasSeen model q) &&
-        answer == getDefault correctAnswers "0" q
+        getDigits answer == getDefault correctAnswers "0" q
         then
           {model | seen = q :: model.seen}
         else
@@ -54,6 +54,12 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
+
+getDigits : String -> String
+getDigits x = String.filter isDigit x
+
+isDigit : Char -> Bool
+isDigit c = List.member c (String.toList "1234567890")
 
 getName : QuestionId -> String
 getName x = getDefault questionName "not named yet" x
