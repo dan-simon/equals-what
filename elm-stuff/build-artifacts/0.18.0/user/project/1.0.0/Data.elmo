@@ -911,7 +911,7 @@ var _user$project$Data$questionText = _eeue56$elm_all_dict$EveryDict$fromList(
 													}
 												}
 											},
-											_1: 'f(x) = number of pairs of pairs of matching braces in x where one pair is in the other\nf({}) = 0\nf({{}}) = 1 (the outer pair and the inner pair)\nf({{}{}}) = 2 (the outer pair and either inner pair)\nf({{{}}}) = 3 (outer and middle, outer and inner, and middle and inner)\nf({{{}}{}}) = 4\nf({{}{}{{{}{}}}{{}}}) = ?'
+											_1: 'A pair of matching braces (or a \"matching pair\" for short) is a pair of an open brace and a close brace where the close brace closes the open brace.\nNote that any brace can be part of only one pair of matching braces.\nIn {}, braces 1 and 2 (the only two braces) form a matching pair.\nIn {{}}, brace 3 closes brace 2, and brace 4 then closes brace 1 (since brace 2 is already closed), so braces 1 and 4 and braces 2 and 3 form matching pairs.\nIn {{}{}}, braces 1 and 6, braces 2 and 3, and braces 4 and 5 form matching pairs.\n\nf(x) = number of pairs of pairs of matching braces in x where one pair of matching braces is in the other pair of matching braces\nf({}) = 0\nf({{}}) = 1 (the outer pair (braces 1 and 4) and the inner pair (braces 2 and 3))\nf({{}{}}) = 2 (the outer pair and either inner pair)\nf({{{}}}) = 3 (outer and middle, outer and inner, and middle and inner)\nf({{{}}{}}) = 4\nf({{}{}{{{}{}}}{{}}}) = ?'
 										},
 										_1: {
 											ctor: '::',

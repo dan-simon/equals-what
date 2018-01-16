@@ -194,9 +194,15 @@ number of hidden 7s in 63750640677315350160 = 41
 number of hidden 7s in 306994111772424400362482646284077776273548255558616473829043 = ?"""),
   ([False, True, True, True], """number of numbers that can be made using all of 1, 2, 3, 4, +, -, - = 4 (2, 4, 6, 8)
 number of numbers that can be made using all of 4, 1, 2, 4, 3, 10, 7, +, -, +, +, -, - = ?"""),
-  ([True, False, False, False], """f(x) = number of pairs of pairs of matching braces in x where one pair is in the other
+  ([True, False, False, False], """A pair of matching braces (or a "matching pair" for short) is a pair of an open brace and a close brace where the close brace closes the open brace.
+Note that any brace can be part of only one pair of matching braces.
+In {}, braces 1 and 2 (the only two braces) form a matching pair.
+In {{}}, brace 3 closes brace 2, and brace 4 then closes brace 1 (since brace 2 is already closed), so braces 1 and 4 and braces 2 and 3 form matching pairs.
+In {{}{}}, braces 1 and 6, braces 2 and 3, and braces 4 and 5 form matching pairs.
+
+f(x) = number of pairs of pairs of matching braces in x where one pair of matching braces is in the other pair of matching braces
 f({}) = 0
-f({{}}) = 1 (the outer pair and the inner pair)
+f({{}}) = 1 (the outer pair (braces 1 and 4) and the inner pair (braces 2 and 3))
 f({{}{}}) = 2 (the outer pair and either inner pair)
 f({{{}}}) = 3 (outer and middle, outer and inner, and middle and inner)
 f({{{}}{}}) = 4
