@@ -27,7 +27,7 @@ questionText = EveryDict.fromList [
   ([False, False, False, False], "1 + 2 + ... + 1000 = ?"),
   ([False, False, False, True], """Let us define the sum, product, minimum, and maximum of multidimensional arrays not as applying to all the numbers in the array and returning a number, but as applying to each 1D array in the array and replacing it by the appropriate number.
 So, for example, the sum of the 2D array [[1, 2], [3, 4]] is not 10 (the sum of all the numbers in the array), but rather [3, 7] (the array of sums of the 1D items).
-Similarly, the product of [[[1, 2], [3, 4]], [[5, 6], [7, 8]]] is [[2, 6], [12, 56]].
+Similarly, the product of [[[1, 2], [3, 4]], [[5, 6], [7, 8]]] is [[2, 12], [30, 56]].
 Notice that taking the sum, product, minimum, or maximum of an array reduces its dimension by 1.
 As a consequence, taking the sum, product, minimum, or maximum of an n-dimensional array n times will give a zero-dimensional result, that is, just a number.
 
