@@ -192,7 +192,8 @@ number of hidden 7s in 357 = 3
 number of hidden 7s in 733 = 1
 number of hidden 7s in 63750640677315350160 = 41
 number of hidden 7s in 306994111772424400362482646284077776273548255558616473829043 = ?"""),
-  ([False, True, True, True], """number of numbers that can be made using all of 1, 2, 3, 4, +, -, - = 4 (2, 4, 6, 8)
+  ([False, True, True, True], """number of numbers that can be made using all of 1, 2, 3, 4, +, -, - = 5
+(1 + 2 - 3 - 4 = -4, 1 - 2 + 3 - 4 = -2, 1 - 2 - 3 + 4 = 0, 2 - 1 - 3 + 4 = 2, 3 - 1 - 2 + 4 = 4)
 number of numbers that can be made using all of 4, 1, 2, 4, 3, 10, 7, +, -, +, +, -, - = ?"""),
   ([True, False, False, False], """A pair of matching braces (or a "matching pair" for short) is a pair of an open brace and a close brace where the close brace closes the open brace.
 Note that any brace can be part of only one pair of matching braces.
